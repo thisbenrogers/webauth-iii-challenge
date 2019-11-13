@@ -1,8 +1,8 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 
 const Users = require('../users/user-model.js');
+const Token = require('./auth-helpers.js');
 const { validateUser } = require('../users/user-helpers.js');
 
 router.post('/', (req, res) => {
@@ -16,9 +16,11 @@ router.post('/', (req, res) => {
     const hash = bcrypt.hashSync(user.password, 10);
     user.password = hash;
 
+    const token = Token.getJwt(user.username);
+
     Users.add(user)
       .then(saved => {
-        res.status(201).json(saved);
+        res.status(201).json({ saved: saved, token: token });
       })
       .catch(error => {
         res.status(500).json(error);
@@ -30,9 +32,7 @@ router.post('/', (req, res) => {
       message: 'Invalid user info, see errors',
       errors: validateResult.errors
     });
-
   }
-
 })
 
 module.exports = router;
