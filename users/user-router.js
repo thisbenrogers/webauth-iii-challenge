@@ -2,10 +2,12 @@ const router = require('express').Router();
 
 const Users = require('./user-model.js');
 
-router.get('/', (req, res) => {
+const restricted = require('../auth/restricted-middleware.js');
+
+router.get('/', restricted, (req, res) => {
   Users.find()
     .then(users => {
-      // uncomment the next line and comment out the message below it
+      // TODO uncomment the next line and comment out the message below it
       // res.json(users);
       res.status(200).json({ message: "Here, have some users!" });
     })
