@@ -6,9 +6,9 @@ const cors = require("cors");
 
 // const logger = require('../middleware/logger');
 
-// const authRouter = require("../auth/auth-router.js");
+const loginRouter = require("../auth/login-router.js");
+const registerRouter = require("../auth/register-router.js");
 const usersRouter = require("../users/user-router");
-// const postsRouter = require('../posts/post-router');
 
 const server = express();
 
@@ -17,9 +17,9 @@ server.use(helmet());
 server.use(express.json());
 server.use(cors());
 
-// server.use("/api/auth", authRouter);
+server.use("/api/login", loginRouter);
+server.use("/api/register", registerRouter);
 server.use("/api/users", usersRouter);
-// server.use('/api/posts', postsRouter);
 
 server.get("/", (req, res) => {
   res.send("<h1>🚀</h1>");
